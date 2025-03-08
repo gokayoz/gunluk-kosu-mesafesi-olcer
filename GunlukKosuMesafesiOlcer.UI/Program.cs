@@ -18,12 +18,10 @@
             }
             Console.WriteLine("\nTeşekkürler! Uygulamayı kullandığınız için memnun olduk.");
         }
-
         static bool GirilenSayiMi(string strSayi, out int sayi)
         {
             return int.TryParse(strSayi, out sayi) && sayi > 0;
         }
-
         static int SayiAl(string mesaj)
         {
             int sayi;
@@ -40,37 +38,36 @@
             } while (!GirilenSayiMi(strSayi, out sayi));
             return sayi;
         }
-
+        static int KosuBolumSayisiAl()
+        {
+            return SayiAl("Koşu kaç bölümden oluşacak? (Örnek: 3): ");
+        }
+        static (int adim, int sure) BolumBilgisiAl(int bolumNumarasi)
+        {
+            int adim = SayiAl($"Koşunun {bolumNumarasi}. bölümü için dakikada kaç adım attığınızı giriniz: ");
+            int sure = SayiAl($"Koşunun {bolumNumarasi}. bölümü için süreyi giriniz (dakika cinsinden): ");
+            return (adim, sure);
+        }
         static int OrtalamaBirAdimAl()
         {
             return SayiAl("Lütfen ortalama bir adımınızı santimetre cinsinden giriniz (Örnek: 70): ");
         }
-
-        static int DakikadaKosulanAdimAl()
-        {
-            return SayiAl("Lütfen dakikada kaç adım koştuğunuzu giriniz (Örnek: 160): ");
-        }
-
-        static int KosuSuresiAl()
-        {
-            Console.WriteLine("Koşu sürenizi giriniz (saat ve dakika olarak).");
-            int kosuSaati = SayiAl("Saat: ");
-            int kosuDakikasi = SayiAl("Dakika: ");
-            return (kosuSaati * 60) + kosuDakikasi;
-        }
-
-        static int ToplamAdimSayisiHesapla()
-        {
-            return DakikadaKosulanAdimAl() * KosuSuresiAl();
-        }
-
         static float KosuMesafesiHesapla()
         {
-            float toplamKosuMesafesi = (OrtalamaBirAdimAl() * ToplamAdimSayisiHesapla()) / 100f;
+            int bolumSayisi = KosuBolumSayisiAl();
+            int adimUzunlugu = OrtalamaBirAdimAl();
+            int toplamAdimSayisi = 0;
+
+            for (int i = 1; i <= bolumSayisi; i++)
+            {
+                var (adim, sure) = BolumBilgisiAl(i);
+                toplamAdimSayisi += adim * sure;
+            }
+
+            float toplamKosuMesafesi = (adimUzunlugu * toplamAdimSayisi) / 100f;
             Console.WriteLine($"\nToplam koşu mesafeniz: {toplamKosuMesafesi} metre.");
             return toplamKosuMesafesi;
         }
-
         static bool HesaplamaDevamMi()
         {
             Console.WriteLine("\nTekrar hesaplama yapmak istiyorsanız herhangi bir tuşa basın. Çıkmak için 'evet' yazın.");
