@@ -1,1 +1,1 @@
-# GunlukKosuMesafesiOlcer
+# Günlük Koşu Mesafesi Ölçen Uygulama
